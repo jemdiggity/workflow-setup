@@ -7,6 +7,8 @@ set -euo pipefail
 #   curl -fsSL https://raw.githubusercontent.com/jemdiggity/workflow-setup/main/setup.sh | bash
 #   ./setup.sh
 
+main() {
+
 ZSHRC="$HOME/.zshrc"
 GITCONFIG="$HOME/.gitconfig"
 TMUX_CONF="$HOME/.tmux.conf"
@@ -261,3 +263,7 @@ echo ""
 info "Setup complete. Restart your terminal or run: source $ZSHRC"
 info "In tmux, press Ctrl-b + I to install tmux plugins."
 info "Open nvim to let LazyVim install its plugins on first launch."
+
+}
+
+main "$@"
