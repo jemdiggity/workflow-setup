@@ -72,7 +72,6 @@ Bootstraps [LazyVim](https://www.lazyvim.org/) if no config exists at `~/.config
 
 Writes a config with:
 
-- Prefix remapped to `Ctrl-a`
 - Mouse mode, vi-style pane navigation
 - `|` and `-` for splits
 - TPM with tmux-sensible and tmux-yank
@@ -80,5 +79,5 @@ Writes a config with:
 ## Post-Install
 
 1. Restart your terminal (or `source ~/.zshrc`)
-2. In tmux: press `Ctrl-a` then `I` to install plugins
+2. In tmux: press `Ctrl-b` then `I` to install plugins
 3. Open `nvim` to let LazyVim install on first launch

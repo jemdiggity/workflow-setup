@@ -206,11 +206,6 @@ if [[ -f "$TMUX_CONF" ]]; then
 else
   info "Writing tmux config..."
   cat > "$TMUX_CONF" << 'TMUXCONF'
-# Prefix: Ctrl-a
-unbind C-b
-set -g prefix C-a
-bind C-a send-prefix
-
 # Quality of life
 set -g mouse on
 set -g base-index 1
@@ -271,5 +266,5 @@ fi
 # -------------------------------------------------------------------
 echo ""
 info "Setup complete. Restart your terminal or run: source $ZSHRC"
-info "In tmux, press Ctrl-a + I to install tmux plugins."
+info "In tmux, press Ctrl-b + I to install tmux plugins."
 info "Open nvim to let LazyVim install its plugins on first launch."
