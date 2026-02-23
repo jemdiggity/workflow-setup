@@ -146,9 +146,6 @@ format = """
 $directory\
 $git_branch\
 $git_status\
-$nodejs\
-$rust\
-$python\
 $cmd_duration\
 $line_break\
 $character"""
@@ -163,16 +160,6 @@ symbol = " "
 
 [git_status]
 format = '([$all_status$ahead_behind]($style) )'
-
-[nodejs]
-format = "[$symbol($version)]($style) "
-symbol = " "
-
-[rust]
-format = "[$symbol($version)]($style) "
-
-[python]
-format = "[$symbol($version)]($style) "
 
 [cmd_duration]
 min_time = 2000
@@ -195,6 +182,12 @@ else
   rm -rf "$NVIM_DIR"
   git clone https://github.com/LazyVim/starter "$NVIM_DIR"
   rm -rf "$NVIM_DIR/.git"
+
+  # Disable spell checking (LazyVim enables it by default)
+  cat >> "$NVIM_DIR/lua/config/options.lua" << 'NVIMOPTS'
+vim.opt.spell = false
+NVIMOPTS
+
   ok "LazyVim installed"
 fi
 
