@@ -78,6 +78,32 @@ Writes a config with:
 
 ## Post-Install
 
-1. Restart your terminal (or `source ~/.zshrc`)
-2. In tmux: press `Ctrl-b` then `I` to install plugins
-3. Open `nvim` to let LazyVim install on first launch
+1. **Open a new terminal window** (or run `source ~/.zshrc` in your current one) so the shell picks up the new config.
+
+2. **Install tmux plugins:**
+   - Start tmux: `tmux`
+   - Press `Ctrl-b` then `I` (capital I) to install plugins
+   - You should see a message confirming plugins were installed
+   - Note: `Ctrl-b + I` only works **from inside a tmux session**. It will not work from a regular terminal.
+
+3. **Launch neovim** (`nvim`) and wait for LazyVim to automatically download and install its plugins on first launch.
+
+## Troubleshooting
+
+**Shell changes didn't take effect:**
+Make sure you opened a **new** terminal window after running the script. Running `source ~/.zshrc` in an existing window also works.
+
+**`Ctrl-b + I` does nothing in tmux:**
+- Make sure you're inside a tmux session (run `tmux` first).
+- If tmux was already running before you ran the setup script, reload the config by running this from inside tmux:
+  1. `Ctrl-b` then `:` to open the tmux command prompt
+  2. Type `source-file ~/.tmux.conf` and press Enter
+  3. Try `Ctrl-b + I` again
+
+**Script failed partway through when using `curl | bash`:**
+Try running it locally instead:
+```bash
+git clone https://github.com/jemdiggity/workflow-setup.git
+cd workflow-setup
+./setup.sh
+```
