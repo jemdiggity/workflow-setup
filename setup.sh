@@ -64,7 +64,27 @@ for pkg in "${PACKAGES[@]}"; do
 done
 
 # -------------------------------------------------------------------
-# 3. Git configuration
+# 3. Ghostty (optional — GUI terminal emulator)
+# -------------------------------------------------------------------
+if brew list --cask ghostty &>/dev/null; then
+  ok "Ghostty already installed"
+else
+  echo ""
+  info "Ghostty is a fast, native terminal emulator built in Zig with"
+  info "GPU-accelerated rendering, rich configuration, and native macOS support."
+  printf '\033[1;34m[info]\033[0m Install Ghostty? (y/n) '
+  read -r INSTALL_GHOSTTY
+  if [[ "$INSTALL_GHOSTTY" =~ ^[Yy]$ ]]; then
+    info "Installing Ghostty..."
+    brew install --cask ghostty
+    ok "Ghostty installed"
+  else
+    ok "Skipping Ghostty"
+  fi
+fi
+
+# -------------------------------------------------------------------
+# 4. Git configuration
 # -------------------------------------------------------------------
 info "Configuring git..."
 
@@ -96,7 +116,7 @@ git config --global diff.colorMoved "default"
 ok "Git aliases and delta configured"
 
 # -------------------------------------------------------------------
-# 4. Zshrc
+# 5. Zshrc
 # -------------------------------------------------------------------
 touch "$ZSHRC"
 
@@ -136,7 +156,7 @@ ZSHBLOCK
 fi
 
 # -------------------------------------------------------------------
-# 5. Starship config
+# 6. Starship config
 # -------------------------------------------------------------------
 mkdir -p "$(dirname "$STARSHIP_CONF")"
 
@@ -176,7 +196,7 @@ STARSHIPCONF
 fi
 
 # -------------------------------------------------------------------
-# 6. LazyVim
+# 7. LazyVim
 # -------------------------------------------------------------------
 if [[ -d "$NVIM_DIR" ]] && [[ -n "$(ls -A "$NVIM_DIR" 2>/dev/null)" ]]; then
   ok "Neovim config already exists — skipping LazyVim bootstrap"
@@ -195,7 +215,7 @@ NVIMOPTS
 fi
 
 # -------------------------------------------------------------------
-# 7. Tmux
+# 8. Tmux
 # -------------------------------------------------------------------
 if [[ -f "$TMUX_CONF" ]]; then
   ok "Tmux config already exists — skipping"
