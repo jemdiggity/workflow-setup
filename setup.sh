@@ -284,7 +284,8 @@ fi
 # -------------------------------------------------------------------
 echo ""
 info "Setup complete. Restart your terminal or run: source $ZSHRC"
-info "In tmux, press Ctrl-b + I to install tmux plugins."
+info "If tmux is already running, reload config with: Ctrl-b then :source-file ~/.tmux.conf"
+info "Then press Ctrl-b + I inside tmux to install plugins."
 info "Open nvim to let LazyVim install its plugins on first launch."
 
 }
