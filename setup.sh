@@ -4,7 +4,7 @@ set -euo pipefail
 # Terminal Workflow Setup
 # Idempotent — safe to run repeatedly.
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/jemdiggity/workflow-setup/main/setup.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/jemdiggity/setup-workflow/main/setup.sh | bash
 #   ./setup.sh
 
 main() {

@@ -5,13 +5,13 @@ Idempotent setup script for a macOS terminal workflow. Safe to run on a fresh ma
 ## Quick Start
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jemdiggity/workflow-setup/main/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/jemdiggity/setup-workflow/main/setup.sh | bash
 ```
 
 Or clone and run locally:
 
 ```bash
-git clone https://github.com/jemdiggity/workflow-setup.git
+git clone https://github.com/jemdiggity/setup-workflow.git
 cd workflow-setup
 ./setup.sh
 ```
@@ -103,7 +103,7 @@ Make sure you opened a **new** terminal window after running the script. Running
 **Script failed partway through when using `curl | bash`:**
 Try running it locally instead:
 ```bash
-git clone https://github.com/jemdiggity/workflow-setup.git
+git clone https://github.com/jemdiggity/setup-workflow.git
 cd workflow-setup
 ./setup.sh
 ```
