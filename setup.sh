@@ -20,7 +20,7 @@ MARKER_START="# >>> workflow-setup >>>"
 MARKER_END="# <<< workflow-setup <<<"
 
 info() { printf '\033[1;34m[info]\033[0m %s\n' "$1"; }
-ok()   { printf '\033[1;32m[ok]\033[0m   %s\n' "$1"; }
+ok() { printf '\033[1;32m[ok]\033[0m   %s\n' "$1"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$1"; }
 
 # -------------------------------------------------------------------
@@ -51,6 +51,7 @@ PACKAGES=(
   starship
   tmux
   bat
+  glow
 )
 
 for pkg in "${PACKAGES[@]}"; do
@@ -68,18 +69,18 @@ done
 info "Configuring git..."
 
 # Aliases
-git config --global alias.st   "status"
-git config --global alias.co   "checkout"
-git config --global alias.br   "branch"
-git config --global alias.ci   "commit"
-git config --global alias.lg   "log --oneline --graph --decorate --all"
-git config --global alias.df   "diff"
-git config --global alias.dfs  "diff --staged"
+git config --global alias.st "status"
+git config --global alias.co "checkout"
+git config --global alias.br "branch"
+git config --global alias.ci "commit"
+git config --global alias.lg "log --oneline --graph --decorate --all"
+git config --global alias.df "diff"
+git config --global alias.dfs "diff --staged"
 git config --global alias.last "log -1 HEAD"
 git config --global alias.unstage "reset HEAD --"
 git config --global alias.amend "commit --amend --no-edit"
 git config --global alias.sync "pull --rebase"
-git config --global alias.wip  "!git add -A && git commit -m 'WIP'"
+git config --global alias.wip "!git add -A && git commit -m 'WIP'"
 git config --global alias.undo "reset --soft HEAD~1"
 git config --global alias.please "push --force-with-lease"
 
@@ -104,7 +105,7 @@ if grep -qF "$MARKER_START" "$ZSHRC"; then
 else
   info "Appending workflow config to $ZSHRC..."
   cp "$ZSHRC" "$ZSHRC.bak.$(date +%s)"
-  cat >> "$ZSHRC" << 'ZSHBLOCK'
+  cat >>"$ZSHRC" <<'ZSHBLOCK'
 
 # >>> workflow-setup >>>
 # Managed by workflow-setup — do not edit this block manually.
@@ -143,7 +144,7 @@ if [[ -f "$STARSHIP_CONF" ]]; then
   ok "Starship config already exists — skipping"
 else
   info "Writing starship config..."
-  cat > "$STARSHIP_CONF" << 'STARSHIPCONF'
+  cat >"$STARSHIP_CONF" <<'STARSHIPCONF'
 format = """
 $directory\
 $git_branch\
@@ -186,7 +187,7 @@ else
   rm -rf "$NVIM_DIR/.git"
 
   # Disable spell checking (LazyVim enables it by default)
-  cat >> "$NVIM_DIR/lua/config/options.lua" << 'NVIMOPTS'
+  cat >>"$NVIM_DIR/lua/config/options.lua" <<'NVIMOPTS'
 vim.opt.spell = false
 NVIMOPTS
 
@@ -200,7 +201,7 @@ if [[ -f "$TMUX_CONF" ]]; then
   ok "Tmux config already exists — skipping"
 else
   info "Writing tmux config..."
-  cat > "$TMUX_CONF" << 'TMUXCONF'
+  cat >"$TMUX_CONF" <<'TMUXCONF'
 # Quality of life
 set -g mouse on
 set -g base-index 1
