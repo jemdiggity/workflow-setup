@@ -68,7 +68,7 @@ done
 # -------------------------------------------------------------------
 # 3. Ghostty (optional — GUI terminal emulator)
 # -------------------------------------------------------------------
-if brew list --cask ghostty &>/dev/null; then
+if [[ -d "/Applications/Ghostty.app" ]] || brew list --cask ghostty &>/dev/null; then
   ok "Ghostty — Fast, GPU-accelerated terminal emulator"
 else
   echo ""
