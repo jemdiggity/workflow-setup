@@ -41,24 +41,26 @@ fi
 # 2. Brew packages
 # -------------------------------------------------------------------
 PACKAGES=(
-  neovim
-  fzf
-  fd
-  git-delta
-  ripgrep
-  zoxide
-  eza
-  starship
-  tmux
-  bat
-  glow
+  "neovim:Terminal-based text editor"
+  "fzf:Fuzzy finder for files, history, and more"
+  "fd:Fast file finder (modern find replacement)"
+  "git-delta:Syntax-highlighted git diffs"
+  "ripgrep:Fast text search (modern grep replacement)"
+  "zoxide:Smarter cd that learns your habits"
+  "eza:Modern ls with icons and git status"
+  "starship:Minimal, fast shell prompt"
+  "tmux:Terminal multiplexer for splits and sessions"
+  "bat:cat with syntax highlighting and line numbers"
+  "glow:Render markdown in the terminal"
 )
 
-for pkg in "${PACKAGES[@]}"; do
+for entry in "${PACKAGES[@]}"; do
+  pkg="${entry%%:*}"
+  desc="${entry#*:}"
   if brew list "$pkg" &>/dev/null; then
-    ok "$pkg already installed"
+    ok "$pkg — $desc"
   else
-    info "Installing $pkg..."
+    info "Installing $pkg — $desc"
     brew install "$pkg"
   fi
 done
@@ -67,11 +69,11 @@ done
 # 3. Ghostty (optional — GUI terminal emulator)
 # -------------------------------------------------------------------
 if brew list --cask ghostty &>/dev/null; then
-  ok "Ghostty already installed"
+  ok "Ghostty — Fast, GPU-accelerated terminal emulator"
 else
   echo ""
-  info "Ghostty is a fast, native terminal emulator built in Zig with"
-  info "GPU-accelerated rendering, rich configuration, and native macOS support."
+  info "Ghostty is a fast, GPU-accelerated terminal emulator with"
+  info "rich configuration and native macOS support."
   printf '\033[1;34m[info]\033[0m Install Ghostty? (y/n) '
   read -r INSTALL_GHOSTTY
   if [[ "$INSTALL_GHOSTTY" =~ ^[Yy]$ ]]; then
