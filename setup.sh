@@ -9,125 +9,125 @@ set -euo pipefail
 
 main() {
 
-ZSHRC="$HOME/.zshrc"
-GITCONFIG="$HOME/.gitconfig"
-TMUX_CONF="$HOME/.tmux.conf"
-NVIM_DIR="$HOME/.config/nvim"
-STARSHIP_CONF="$HOME/.config/starship.toml"
-TPM_DIR="$HOME/.tmux/plugins/tpm"
+  ZSHRC="$HOME/.zshrc"
+  GITCONFIG="$HOME/.gitconfig"
+  TMUX_CONF="$HOME/.tmux.conf"
+  NVIM_DIR="$HOME/.config/nvim"
+  STARSHIP_CONF="$HOME/.config/starship.toml"
+  TPM_DIR="$HOME/.tmux/plugins/tpm"
 
-MARKER_START="# >>> workflow-setup >>>"
-MARKER_END="# <<< workflow-setup <<<"
+  MARKER_START="# >>> workflow-setup >>>"
+  MARKER_END="# <<< workflow-setup <<<"
 
-info() { printf '\033[1;34m[info]\033[0m %s\n' "$1"; }
-ok() { printf '\033[1;32m[ok]\033[0m   %s\n' "$1"; }
-warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$1"; }
+  info() { printf '\033[1;34m[info]\033[0m %s\n' "$1"; }
+  ok() { printf '\033[1;32m[ok]\033[0m   %s\n' "$1"; }
+  warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$1"; }
 
-# -------------------------------------------------------------------
-# 1. Homebrew
-# -------------------------------------------------------------------
-if ! command -v brew &>/dev/null; then
-  info "Installing Homebrew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  # Add brew to PATH for the rest of this script
-  if [[ -f /opt/homebrew/bin/brew ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
-else
-  ok "Homebrew already installed"
-fi
-
-# -------------------------------------------------------------------
-# 2. Brew packages
-# -------------------------------------------------------------------
-PACKAGES=(
-  "neovim:Terminal-based text editor"
-  "fzf:Fuzzy finder for files, history, and more"
-  "fd:Fast file finder (modern find replacement)"
-  "git-delta:Syntax-highlighted git diffs"
-  "ripgrep:Fast text search (modern grep replacement)"
-  "zoxide:Smarter cd that learns your habits"
-  "eza:Modern ls with icons and git status"
-  "starship:Minimal, fast shell prompt"
-  "tmux:Terminal multiplexer for splits and sessions"
-  "bat:cat with syntax highlighting and line numbers"
-  "glow:Render markdown in the terminal"
-)
-
-for entry in "${PACKAGES[@]}"; do
-  pkg="${entry%%:*}"
-  desc="${entry#*:}"
-  if brew list "$pkg" &>/dev/null; then
-    ok "$pkg — $desc"
+  # -------------------------------------------------------------------
+  # 1. Homebrew
+  # -------------------------------------------------------------------
+  if ! command -v brew &>/dev/null; then
+    info "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Add brew to PATH for the rest of this script
+    if [[ -f /opt/homebrew/bin/brew ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
   else
-    info "Installing $pkg — $desc"
-    brew install "$pkg"
+    ok "Homebrew already installed"
   fi
-done
 
-# -------------------------------------------------------------------
-# 3. Ghostty (optional — GUI terminal emulator)
-# -------------------------------------------------------------------
-if [[ -d "/Applications/Ghostty.app" ]] || brew list --cask ghostty &>/dev/null; then
-  ok "Ghostty — Fast, GPU-accelerated terminal emulator"
-else
-  echo ""
-  info "Ghostty is a fast, GPU-accelerated terminal emulator with"
-  info "rich configuration and native macOS support."
-  printf '\033[1;34m[info]\033[0m Install Ghostty? (y/n) '
-  read -r INSTALL_GHOSTTY </dev/tty
-  if [[ "$INSTALL_GHOSTTY" =~ ^[Yy]$ ]]; then
-    info "Installing Ghostty..."
-    brew install --cask ghostty
-    ok "Ghostty installed"
+  # -------------------------------------------------------------------
+  # 2. Brew packages
+  # -------------------------------------------------------------------
+  PACKAGES=(
+    "neovim:Terminal-based text editor"
+    "fzf:Fuzzy finder for files, history, and more"
+    "fd:Fast file finder (modern find replacement)"
+    "git-delta:Syntax-highlighted git diffs"
+    "ripgrep:Fast text search (modern grep replacement)"
+    "zoxide:Smarter cd that learns your habits"
+    "eza:Modern ls with icons and git status"
+    "starship:Minimal, fast shell prompt"
+    "tmux:Terminal multiplexer for splits and sessions"
+    "bat:cat with syntax highlighting and line numbers"
+    "glow:Render markdown in the terminal"
+  )
+
+  for entry in "${PACKAGES[@]}"; do
+    pkg="${entry%%:*}"
+    desc="${entry#*:}"
+    if brew list "$pkg" &>/dev/null; then
+      ok "$pkg — $desc"
+    else
+      info "Installing $pkg — $desc"
+      brew install "$pkg"
+    fi
+  done
+
+  # -------------------------------------------------------------------
+  # 3. Ghostty (optional — GUI terminal emulator)
+  # -------------------------------------------------------------------
+  if [[ -d "/Applications/Ghostty.app" ]] || brew list --cask ghostty &>/dev/null; then
+    ok "Ghostty — Fast, GPU-accelerated terminal emulator"
   else
-    ok "Skipping Ghostty"
+    echo ""
+    info "Ghostty is a fast, GPU-accelerated terminal emulator with"
+    info "rich configuration and native macOS support."
+    printf '\033[1;34m[info]\033[0m Install Ghostty? (y/n) '
+    read -r INSTALL_GHOSTTY </dev/tty
+    if [[ "$INSTALL_GHOSTTY" =~ ^[Yy]$ ]]; then
+      info "Installing Ghostty..."
+      brew install --cask ghostty
+      ok "Ghostty installed"
+    else
+      ok "Skipping Ghostty"
+    fi
   fi
-fi
 
-# -------------------------------------------------------------------
-# 4. Git configuration
-# -------------------------------------------------------------------
-info "Configuring git..."
+  # -------------------------------------------------------------------
+  # 4. Git configuration
+  # -------------------------------------------------------------------
+  info "Configuring git..."
 
-# Aliases
-git config --global alias.st "status"
-git config --global alias.co "checkout"
-git config --global alias.br "branch"
-git config --global alias.ci "commit"
-git config --global alias.lg "log --oneline --graph --decorate --all"
-git config --global alias.df "diff"
-git config --global alias.dfs "diff --staged"
-git config --global alias.last "log -1 HEAD"
-git config --global alias.unstage "reset HEAD --"
-git config --global alias.amend "commit --amend --no-edit"
-git config --global alias.sync "pull --rebase"
-git config --global alias.wip "!git add -A && git commit -m 'WIP'"
-git config --global alias.undo "reset --soft HEAD~1"
-git config --global alias.please "push --force-with-lease"
+  # Aliases
+  git config --global alias.st "status"
+  git config --global alias.co "checkout"
+  git config --global alias.br "branch"
+  git config --global alias.ci "commit"
+  git config --global alias.lg "log --oneline --graph --decorate --all"
+  git config --global alias.df "diff"
+  git config --global alias.dfs "diff --staged"
+  git config --global alias.last "log -1 HEAD"
+  git config --global alias.unstage "reset HEAD --"
+  git config --global alias.amend "commit --amend --no-edit"
+  git config --global alias.sync "pull --rebase"
+  git config --global alias.wip "!git add -A && git commit -m 'WIP'"
+  git config --global alias.undo "reset --soft HEAD~1"
+  git config --global alias.please "push --force-with-lease"
 
-# Delta as pager
-git config --global core.pager "delta"
-git config --global interactive.diffFilter "delta --color-only"
-git config --global delta.navigate "true"
-git config --global delta.side-by-side "true"
-git config --global delta.line-numbers "true"
-git config --global merge.conflictstyle "diff3"
-git config --global diff.colorMoved "default"
+  # Delta as pager
+  git config --global core.pager "delta"
+  git config --global interactive.diffFilter "delta --color-only"
+  git config --global delta.navigate "true"
+  git config --global delta.side-by-side "true"
+  git config --global delta.line-numbers "true"
+  git config --global merge.conflictstyle "diff3"
+  git config --global diff.colorMoved "default"
 
-ok "Git aliases and delta configured"
+  ok "Git aliases and delta configured"
 
-# -------------------------------------------------------------------
-# 5. Zshrc
-# -------------------------------------------------------------------
-touch "$ZSHRC"
+  # -------------------------------------------------------------------
+  # 5. Zshrc
+  # -------------------------------------------------------------------
+  touch "$ZSHRC"
 
-if grep -qF "$MARKER_START" "$ZSHRC"; then
-  ok "Zshrc block already present — skipping"
-else
-  info "Appending workflow config to $ZSHRC..."
-  cp "$ZSHRC" "$ZSHRC.bak.$(date +%s)"
-  cat >>"$ZSHRC" <<'ZSHBLOCK'
+  if grep -qF "$MARKER_START" "$ZSHRC"; then
+    ok "Zshrc block already present — skipping"
+  else
+    info "Appending workflow config to $ZSHRC..."
+    cp "$ZSHRC" "$ZSHRC.bak.$(date +%s)"
+    cat >>"$ZSHRC" <<'ZSHBLOCK'
 
 # >>> workflow-setup >>>
 # Managed by workflow-setup — do not edit this block manually.
@@ -146,7 +146,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Aliases
 alias ls="eza --icons"
 alias ll="eza -la --icons --git"
-alias tree="eza --tree --icons"
+alias tree="eza --tree --icons --git-ignore"
 alias cat="bat"
 
 # Editor
@@ -154,19 +154,19 @@ export EDITOR=nvim
 
 # <<< workflow-setup <<<
 ZSHBLOCK
-  ok "Zshrc updated (backup saved)"
-fi
+    ok "Zshrc updated (backup saved)"
+  fi
 
-# -------------------------------------------------------------------
-# 6. Starship config
-# -------------------------------------------------------------------
-mkdir -p "$(dirname "$STARSHIP_CONF")"
+  # -------------------------------------------------------------------
+  # 6. Starship config
+  # -------------------------------------------------------------------
+  mkdir -p "$(dirname "$STARSHIP_CONF")"
 
-if [[ -f "$STARSHIP_CONF" ]]; then
-  ok "Starship config already exists — skipping"
-else
-  info "Writing starship config..."
-  cat >"$STARSHIP_CONF" <<'STARSHIPCONF'
+  if [[ -f "$STARSHIP_CONF" ]]; then
+    ok "Starship config already exists — skipping"
+  else
+    info "Writing starship config..."
+    cat >"$STARSHIP_CONF" <<'STARSHIPCONF'
 format = """
 $directory\
 $git_branch\
@@ -194,36 +194,36 @@ format = "[$duration]($style) "
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
 STARSHIPCONF
-  ok "Starship config written"
-fi
+    ok "Starship config written"
+  fi
 
-# -------------------------------------------------------------------
-# 7. LazyVim
-# -------------------------------------------------------------------
-if [[ -d "$NVIM_DIR" ]] && [[ -n "$(ls -A "$NVIM_DIR" 2>/dev/null)" ]]; then
-  ok "Neovim config already exists — skipping LazyVim bootstrap"
-else
-  info "Bootstrapping LazyVim..."
-  rm -rf "$NVIM_DIR"
-  git clone https://github.com/LazyVim/starter "$NVIM_DIR"
-  rm -rf "$NVIM_DIR/.git"
+  # -------------------------------------------------------------------
+  # 7. LazyVim
+  # -------------------------------------------------------------------
+  if [[ -d "$NVIM_DIR" ]] && [[ -n "$(ls -A "$NVIM_DIR" 2>/dev/null)" ]]; then
+    ok "Neovim config already exists — skipping LazyVim bootstrap"
+  else
+    info "Bootstrapping LazyVim..."
+    rm -rf "$NVIM_DIR"
+    git clone https://github.com/LazyVim/starter "$NVIM_DIR"
+    rm -rf "$NVIM_DIR/.git"
 
-  # Disable spell checking (LazyVim enables it by default)
-  cat >>"$NVIM_DIR/lua/config/options.lua" <<'NVIMOPTS'
+    # Disable spell checking (LazyVim enables it by default)
+    cat >>"$NVIM_DIR/lua/config/options.lua" <<'NVIMOPTS'
 vim.opt.spell = false
 NVIMOPTS
 
-  ok "LazyVim installed"
-fi
+    ok "LazyVim installed"
+  fi
 
-# -------------------------------------------------------------------
-# 8. Tmux
-# -------------------------------------------------------------------
-if [[ -f "$TMUX_CONF" ]]; then
-  ok "Tmux config already exists — skipping"
-else
-  info "Writing tmux config..."
-  cat >"$TMUX_CONF" <<'TMUXCONF'
+  # -------------------------------------------------------------------
+  # 8. Tmux
+  # -------------------------------------------------------------------
+  if [[ -f "$TMUX_CONF" ]]; then
+    ok "Tmux config already exists — skipping"
+  else
+    info "Writing tmux config..."
+    cat >"$TMUX_CONF" <<'TMUXCONF'
 # Quality of life
 set -g mouse on
 set -g base-index 1
@@ -267,26 +267,26 @@ set -g @plugin 'tmux-plugins/tmux-yank'
 # Initialize TPM (keep at bottom)
 run '~/.tmux/plugins/tpm/tpm'
 TMUXCONF
-  ok "Tmux config written"
-fi
+    ok "Tmux config written"
+  fi
 
-# Install TPM
-if [[ -d "$TPM_DIR" ]]; then
-  ok "TPM already installed"
-else
-  info "Installing TPM..."
-  git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
-  ok "TPM installed — run prefix + I inside tmux to install plugins"
-fi
+  # Install TPM
+  if [[ -d "$TPM_DIR" ]]; then
+    ok "TPM already installed"
+  else
+    info "Installing TPM..."
+    git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+    ok "TPM installed — run prefix + I inside tmux to install plugins"
+  fi
 
-# -------------------------------------------------------------------
-# Done
-# -------------------------------------------------------------------
-echo ""
-info "Setup complete. Restart your terminal or run: source $ZSHRC"
-info "If tmux is already running, reload config with: Ctrl-b then :source-file ~/.tmux.conf"
-info "Then press Ctrl-b + I inside tmux to install plugins."
-info "Open nvim to let LazyVim install its plugins on first launch."
+  # -------------------------------------------------------------------
+  # Done
+  # -------------------------------------------------------------------
+  echo ""
+  info "Setup complete. Restart your terminal or run: source $ZSHRC"
+  info "If tmux is already running, reload config with: Ctrl-b then :source-file ~/.tmux.conf"
+  info "Then press Ctrl-b + I inside tmux to install plugins."
+  info "Open nvim to let LazyVim install its plugins on first launch."
 
 }
 
