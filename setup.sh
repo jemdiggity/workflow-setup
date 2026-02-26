@@ -75,7 +75,7 @@ else
   info "Ghostty is a fast, GPU-accelerated terminal emulator with"
   info "rich configuration and native macOS support."
   printf '\033[1;34m[info]\033[0m Install Ghostty? (y/n) '
-  read -r INSTALL_GHOSTTY
+  read -r INSTALL_GHOSTTY </dev/tty
   if [[ "$INSTALL_GHOSTTY" =~ ^[Yy]$ ]]; then
     info "Installing Ghostty..."
     brew install --cask ghostty

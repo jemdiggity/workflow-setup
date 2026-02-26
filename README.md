@@ -12,7 +12,7 @@ Or clone and run locally:
 
 ```bash
 git clone https://github.com/jemdiggity/setup-workflow.git
-cd workflow-setup
+cd setup-workflow
 ./setup.sh
 ```
 
@@ -104,6 +104,6 @@ Make sure you opened a **new** terminal window after running the script. Running
 Try running it locally instead:
 ```bash
 git clone https://github.com/jemdiggity/setup-workflow.git
-cd workflow-setup
+cd setup-workflow
 ./setup.sh
 ```
