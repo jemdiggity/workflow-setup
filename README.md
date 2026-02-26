@@ -32,6 +32,7 @@ cd setup-workflow
 | eza | Modern `ls` with icons and git status |
 | zoxide | Smart `cd` that learns your directories |
 | starship | Fast, customizable prompt |
+| ghostty | Fast, GPU-accelerated terminal emulator (optional) |
 
 ### Git Aliases
 
